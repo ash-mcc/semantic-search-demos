@@ -1,0 +1,54 @@
+{:paths   ["src/clj" "resources"]
+ :deps    {org.clojure/clojure                         {:mvn/version "1.11.1"}
+
+           org.clojure/tools.logging                   {:mvn/version "1.2.4"}
+           org.apache.logging.log4j/log4j-api          {:mvn/version "2.18.0"}
+           org.apache.logging.log4j/log4j-core         {:mvn/version "2.18.0"}
+           org.apache.logging.log4j/log4j-1.2-api      {:mvn/version "2.18.0"}
+           org.apache.logging.log4j/log4j-slf4j18-impl {:mvn/version "2.18.0"}
+
+           clj-python/libpython-clj                    {:mvn/version "2.018"}
+           scicloj/scicloj.ml                          {:mvn/version "0.2.0"}
+
+           ;io.github.nextjournal/clerk                 {:mvn/version "0.12.707"} 
+           io.github.nextjournal/clerk                 {:git/url "https://github.com/nextjournal/clerk.git"
+                                                        :sha     "72d3a0cdd1627873e4ecd09d60be63f3ec0ff6ef"} ;; to use the fix that Martin did for me  
+           
+           thheller/shadow-cljs                        {:mvn/version "2.17.0"}
+           reagent/reagent                             {:mvn/version "1.0.0"}
+           }
+ 
+ :aliases {;; clj -A:std
+           ;; ...to run a local REPL
+           :std   {:jvm-opts ["-Xmx4g"
+                              "-Dclojure.tools.logging.factory=clojure.tools.logging.impl/log4j2-factory"
+                              "-Dpolyglot.engine.WarnInterpreterOnly=false" ;; To disable the warning: The polyglot context is using an implementation that does not support runtime compilation
+                              ]}
+
+           ;; clj -A:std:jni
+           ;; ...to run a local REPL that can run the JNI dependent code
+           :jni   {:jvm-opts ["--add-modules" "jdk.incubator.foreign"
+                              "--enable-native-access=ALL-UNNAMED"
+                              #_"-verbose:jni"]}
+           
+           ;; clj -X:std:jni:clerk
+           ;; ...to build the project's Clerk notebooks
+           ;; [to run a file watcher and a webserver for 
+           ;;  the interactive/immediate-feedback development of a notebook
+           ;;  ...send the Clerk related commands at the bottom of a notebook file, to a REPL]
+           :clerk {:exec-fn   nextjournal.clerk/build!
+                   :exec-args {:bundle? false
+                               :paths   ["src/clj/TODO.clj"]}}
+           }
+ }
+
+;; use the find-versions tool which will list *all available* coordinates in sorted order
+;; e.g.
+;;   clj -X:deps find-versions :lib cljsjs/ag-grid-enterprise
+;;   clj -X:deps find-versions :lib metosin/malli
+;;   clj -X:deps find-versions :lib org.slf4j/slf4j-api
+;;   clj -X:deps find-versions :lib scicloj/metamorph.ml
+
+;; print the dependency tree (excluded nodes will be prefixed with X)
+;;   clj -X:deps tree
+;;   clj -X:deps tree | grep tech.ml.dataset

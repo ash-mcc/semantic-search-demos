@@ -1,0 +1,20 @@
+{:linters {:unresolved-namespace {:exclude [
+                                            ;; namespace aliases declared using require-python
+                                            builtins
+                                            tf
+                                            torch
+                                            skf
+                                            rank_bm25
+                                            ]}
+           :unresolved-var       {:exclude [
+                                            ;; is linter complaining about these because of these libs surface their vars?
+                                            libpython-clj2.python
+                                            scicloj.ml.dataset
+                                            ]}
+           :unresolved-symbol    {:exclude [
+                                            ;; bound by py/with in todo.clj 
+                                            f
+                                            ]}
+           }}
+
+

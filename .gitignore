@@ -1,0 +1,13 @@
+.ash/
+.calva/
+.cpcache/
+.DS_Store
+.lsp/
+.nrepl-port
+.vscode/
+.clerk/
+.RData
+.Rhistory
+classes/
+output.log
+nohup.out
